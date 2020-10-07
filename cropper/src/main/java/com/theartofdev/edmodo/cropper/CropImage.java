@@ -138,6 +138,11 @@ public final class CropImage {
         getPickImageChooserIntent(activity), PICK_IMAGE_CHOOSER_REQUEST_CODE);
   }
 
+  public static void startPickImageActivity(@NonNull Activity activity, boolean includeFromCamera) {
+    activity.startActivityForResult(
+            getPickImageChooserIntent(activity, includeFromCamera), PICK_IMAGE_CHOOSER_REQUEST_CODE);
+  }
+
   /**
    * Same as {@link #startPickImageActivity(Activity) startPickImageActivity} method but instead of
    * being called and returning to an Activity, this method can be called and return to a Fragment.
@@ -148,6 +153,11 @@ public final class CropImage {
   public static void startPickImageActivity(@NonNull Context context, @NonNull Fragment fragment) {
     fragment.startActivityForResult(
         getPickImageChooserIntent(context), PICK_IMAGE_CHOOSER_REQUEST_CODE);
+  }
+
+  public static void startPickImageActivity(@NonNull Context context, @NonNull Fragment fragment, boolean includeFromCamera) {
+    fragment.startActivityForResult(
+            getPickImageChooserIntent(context, includeFromCamera), PICK_IMAGE_CHOOSER_REQUEST_CODE);
   }
 
   /**
@@ -162,6 +172,24 @@ public final class CropImage {
   public static Intent getPickImageChooserIntent(@NonNull Context context) {
     return getPickImageChooserIntent(
         context, context.getString(R.string.pick_image_intent_chooser_title), false, true);
+  }
+
+  public static Intent getPickImageChooserIntent(@NonNull Context context, boolean includeFromCamera) {
+    Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT, null);
+    galleryIntent.setType("image/*");
+
+    Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+
+    Intent chooser = new Intent(Intent.ACTION_CHOOSER);
+    chooser.putExtra(Intent.EXTRA_INTENT, galleryIntent);
+    chooser.putExtra(Intent.EXTRA_TITLE, context.getString(R.string.pick_image_intent_chooser_title));
+
+    if (includeFromCamera) {
+      Intent[] intentArray = {cameraIntent};
+      chooser.putExtra(Intent.EXTRA_INITIAL_INTENTS, intentArray);
+    }
+
+    return chooser;
   }
 
   /**
