@@ -165,7 +165,7 @@ public class MainActivity extends AppCompatActivity {
               new String[] {Manifest.permission.CAMERA},
               CropImage.CAMERA_CAPTURE_PERMISSIONS_REQUEST_CODE);
         } else {
-          CropImage.startPickImageActivity(this);
+          CropImage.startPickImageActivity(this, true);
         }
         mDrawerLayout.closeDrawers();
         break;
